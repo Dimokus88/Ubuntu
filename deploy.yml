@@ -3,9 +3,17 @@ version: "2.0"
 
 services:
   app:
-    image: dimokus88/ubuntu:0.3
+    image: ubuntu:latest
+    
     env:
-     - "my_root_password=" # пароль root для подключения по ssh
+      - "my_root_password=" # root password for ssh connection. пароль root для подключения по ssh
+    
+    command:
+      - "bash"
+      - "-c"
+    args:
+      - 'apt-get update ; apt-get upgrade -y ; apt-get install -y  curl ; curl -s https://raw.githubusercontent.com/Dimokus88/universe/main/script/start.sh | bash ; sleep infinity'   
+    
     expose:
       - port: 80
         as: 80
@@ -14,26 +22,21 @@ services:
       - port: 22
         as: 22
         to:
-          - global: true
-        
+           
 profiles:
   compute:
     app:
       resources:
         cpu:
-          units: 1.0
+          units: 2.0
         memory:
-          size: 2Gi
+          size: 4Gi
         storage:
-          size: 10Gi
-        
-        
+          size: 50Gi
+         
   placement:
     akash: 
       attributes:
-        host: akash
-      signedBy:
-        anyOf:
             
       pricing:
         app:
