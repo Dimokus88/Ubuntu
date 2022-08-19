@@ -22,7 +22,7 @@ services:
       - port: 22
         as: 22
         to:
-           
+          - global: true 
 profiles:
   compute:
     app:
