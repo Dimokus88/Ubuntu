@@ -3,16 +3,19 @@ version: "2.0"
 
 services:
   app:
-    image: ubuntu:latest
-    
-    env:
-      - "my_root_password=" # root password for ssh connection. пароль root для подключения по ssh
+    image: ubuntu:latest     
     
     command:
       - "bash"
       - "-c"
     args:
-      - 'apt-get update ; apt-get upgrade -y ; apt-get install -y  curl ; curl -s https://raw.githubusercontent.com/Dimokus88/universe/main/script/start.sh | bash ; sleep infinity'   
+      - 'apt-get update ;
+        apt-get upgrade -y ;
+        apt-get install -y  ssh ;
+        echo "PermitRootLogin yes" >> /etc/ssh/sshd_config ;
+        "(echo YOU_SSH_PASS; echo YOU_SSH_PASS)" | passwd root ; #YOU_SSH_PASS=create ssh password. Задайте пароль для подключения по ssh.
+        service ssh start;
+        sleep infinity'
     
     expose:
       - port: 80
