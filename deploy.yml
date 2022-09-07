@@ -11,10 +11,13 @@ services:
     args:
       - 'apt-get update ;
         apt-get upgrade -y ;
-        apt-get install -y  ssh ;
+        apt-get install -y  ssh goxkcdpwgen ;
+        PASS=$(goxkcdpwgen -n 2 -c -d "-");
         echo "PermitRootLogin yes" >> /etc/ssh/sshd_config ;
-        "(echo YOU_SSH_PASS; echo YOU_SSH_PASS)" | passwd root ; #YOU_SSH_PASS=create ssh password. Задайте пароль для подключения по ssh.
+        "(echo $PASS; echo $PASS)" | passwd root ; #YOU_SSH_PASS=create ssh password. Задайте пароль для подключения по ssh.
         service ssh start;
+        echo "==== ssh user: root ===" ;
+        echo "=== ssh pass: $PASS ===" ;
         sleep infinity'
     
     expose:
