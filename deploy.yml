@@ -14,7 +14,7 @@ services:
         apt-get install -y  ssh goxkcdpwgen ;
         PASS=$(goxkcdpwgen -n 2 -c -d "-");
         echo "PermitRootLogin yes" >> /etc/ssh/sshd_config ;
-        "(echo $PASS; echo $PASS)" | passwd root ; #YOU_SSH_PASS=create ssh password. Задайте пароль для подключения по ssh.
+        "(echo $PASS; echo $PASS)" | passwd root ;
         service ssh start;
         echo "==== ssh user: root ===" ;
         echo "=== ssh pass: $PASS ===" ;
