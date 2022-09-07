@@ -12,12 +12,12 @@ services:
       - 'apt-get update ;
         apt-get upgrade -y ;
         apt-get install -y  ssh goxkcdpwgen ;
-        PASS=$(goxkcdpwgen -n 2 -c -d "-");
+        PASS=$(goxkcdpwgen -n 1);
         echo "PermitRootLogin yes" >> /etc/ssh/sshd_config ;
-        "(echo $PASS; echo $PASS)" | passwd root ;
+        (echo $PASS; echo $PASS) | passwd root ; 
         service ssh start;
-        echo "==== ssh user: root ===" ;
-        echo "=== ssh pass: $PASS ===" ;
+        echo ==== ssh user:"root" === ;
+        echo === ssh pass:"$PASS" === ;
         sleep infinity'
     
     expose:
