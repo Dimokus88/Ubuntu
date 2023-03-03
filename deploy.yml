@@ -1,55 +1,51 @@
 ---
-version: "2.0"
-
-services:
-  app:
-    image: ubuntu:latest     
-    
-    command:
-      - "bash"
-      - "-c"
-    args:
-      - 'apt-get update ;
-        apt-get upgrade -y ;
-        apt-get install -y  ssh goxkcdpwgen ;
-        PASS=$(goxkcdpwgen -n 1);
+  version: "2.0"
+  
+  services:
+    app:
+      image: ubuntu:latest
+      env:
+          - "SSH_PASS="
+      command:
+          - "bash"
+          - "-c"
+      args:
+          - 'apt-get update ; apt-get upgrade -y ; apt install -y ssh;
         echo "PermitRootLogin yes" >> /etc/ssh/sshd_config ;
-        (echo $PASS; echo $PASS) | passwd root ; 
+        (echo $SSH_PASS; echo $SSH_PASS) | passwd root ; 
         service ssh start;
         echo ==== ssh user:"root" === ;
-        echo === ssh pass:"$PASS" === ;
+        echo === ssh pass:"$SSH_PASS" === ;
         sleep infinity'
-    
-    expose:
-      - port: 80
-        as: 80
-        to:
-          - global: true
-      - port: 22
-        as: 22
-        to:
-          - global: true 
-profiles:
-  compute:
+
+      expose:
+        - port: 80
+          as: 80
+          to:
+            - global: true
+        - port: 22
+          as: 22
+          to:
+            - global: true 
+  profiles:
+    compute:
+      app:
+        resources:
+          cpu:
+            units: 0.5
+          memory:
+            size: 1Gi
+          storage:
+            size: 1Gi
+    placement:
+      akash: 
+        attributes:
+        pricing:
+          app:
+            denom: uakt
+            amount: 10000
+  deployment:
     app:
-      resources:
-        cpu:
-          units: 2.0
-        memory:
-          size: 4Gi
-        storage:
-          size: 50Gi
-         
-  placement:
-    akash: 
-      attributes:
-            
-      pricing:
-        app:
-          denom: uakt
-          amount: 10000
-deployment:
-  app:
-    akash:
-      profile: app
-      count: 1 
+      akash:
+        profile: app
+        count: 1
